@@ -1,0 +1,13 @@
+{
+  "appId": "com.sims.app",
+  "appName": "sims-app",
+  "webDir": "dist",
+
+  "android": {
+    "allowMixedContent": true
+  },
+  "server": {
+    "cleartext": true,
+    "androidScheme": "http"
+  }
+}
