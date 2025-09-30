@@ -52,7 +52,7 @@ const useCountUp = (targetValue, duration = 2000) => {
     if (targetValue > 0) {
       animationFrameRef.current = requestAnimationFrame(animate);
     } else {
-        setCount(0); // If target is 0, just set it to 0 immediately
+      setCount(0); // If target is 0, just set it to 0 immediately
     }
 
 
@@ -267,9 +267,9 @@ const FeeModule = () => {
       if (showEditModal) {
         const currentRecordUpdated = { ...currentRecord, ...newFormData };
         const getTermStatusForRecalculation = (paid, dueDate) => { // Simplified to avoid paymentDate as it's set on check
-            if (paid) return 'Paid';
-            if (dueDate && new Date(dueDate) < new Date()) return 'Overdue';
-            return 'Pending';
+          if (paid) return 'Paid';
+          if (dueDate && new Date(dueDate) < new Date()) return 'Overdue';
+          return 'Pending';
         };
 
         const term1Status = getTermStatusForRecalculation(newFormData.term1Paid, newFormData.term1DueDate);
@@ -380,7 +380,7 @@ const FeeModule = () => {
         admin_id: user?.profile?._id || user?.profile?.userId || user?.profile?.user_id || '', // Add admin ID
       };
       try {
-        console.log('Add payload:', payload);
+
         await axios.post(`${API_BASE_URL}/api/fees`, payload, { // Use API_BASE_URL
           headers: token ? { Authorization: `Bearer ${token}` } : {}
         });
@@ -416,6 +416,7 @@ const FeeModule = () => {
       }
 
     } else { // It's an edit
+
       const payload = {
         student_id: formData.studentId,
         student_name: formData.studentName,
@@ -445,7 +446,7 @@ const FeeModule = () => {
         },
       };
       try {
-        console.log('Edit payload:', payload);
+
         await axios.put(`${API_BASE_URL}/api/fees/${currentRecord.id}`, payload, { // Use API_BASE_URL
           headers: token ? { Authorization: `Bearer ${token}` } : {}
         });
@@ -646,57 +647,57 @@ const FeeModule = () => {
     return paidTermsNames.join(', ');
   };
 
-// Helper function to get the most recent payment date
-const getMostRecentPaymentDate = (record) => {
-  const dates = [];
-  if (record.term1PaymentDate && record.term1Status === 'Paid') dates.push({ date: new Date(record.term1PaymentDate), term: 1 });
-  if (record.term2PaymentDate && record.term2Status === 'Paid') dates.push({ date: new Date(record.term2PaymentDate), term: 2 });
-  if (record.term3PaymentDate && record.term3Status === 'Paid') dates.push({ date: new Date(record.term3PaymentDate), term: 3 });
+  // Helper function to get the most recent payment date
+  const getMostRecentPaymentDate = (record) => {
+    const dates = [];
+    if (record.term1PaymentDate && record.term1Status === 'Paid') dates.push({ date: new Date(record.term1PaymentDate), term: 1 });
+    if (record.term2PaymentDate && record.term2Status === 'Paid') dates.push({ date: new Date(record.term2PaymentDate), term: 2 });
+    if (record.term3PaymentDate && record.term3Status === 'Paid') dates.push({ date: new Date(record.term3PaymentDate), term: 3 });
 
-  if (dates.length === 0) {
-    return 'N/A';
-  }
-
-  // Sort dates in descending order to find the most recent one. If dates are equal, sort by term number (descending)
-  dates.sort((a, b) => {
-    const dateDiff = b.date.getTime() - a.date.getTime();
-    if (dateDiff === 0) {
-      return b.term - a.term; // If dates are the same, the higher term number is considered more recent
+    if (dates.length === 0) {
+      return 'N/A';
     }
-    return dateDiff;
-  });
 
-  return dates[0].date.toISOString().slice(0, 10); // Return in YYYY-MM-DD format
-};
+    // Sort dates in descending order to find the most recent one. If dates are equal, sort by term number (descending)
+    dates.sort((a, b) => {
+      const dateDiff = b.date.getTime() - a.date.getTime();
+      if (dateDiff === 0) {
+        return b.term - a.term; // If dates are the same, the higher term number is considered more recent
+      }
+      return dateDiff;
+    });
 
-// Helper function to get the payment method of the most recent payment
-const getMostRecentPaymentMethod = (record) => {
-  const payments = [];
-  if (record.term1PaymentDate && record.term1PaymentMethod && record.term1Status === 'Paid') {
-    payments.push({ date: new Date(record.term1PaymentDate), method: record.term1PaymentMethod, term: 1 });
-  }
-  if (record.term2PaymentDate && record.term2PaymentMethod && record.term2Status === 'Paid') {
-    payments.push({ date: new Date(record.term2PaymentDate), method: record.term2PaymentMethod, term: 2 });
-  }
-  if (record.term3PaymentDate && record.term3PaymentMethod && record.term3Status === 'Paid') {
-    payments.push({ date: new Date(record.term3PaymentDate), method: record.term3PaymentMethod, term: 3 });
-  }
+    return dates[0].date.toISOString().slice(0, 10); // Return in YYYY-MM-DD format
+  };
 
-  if (payments.length === 0) {
-    return 'N/A';
-  }
-
-  // Sort payments in descending order by date. If dates are equal, sort by term number (descending)
-  payments.sort((a, b) => {
-    const dateDiff = b.date.getTime() - a.date.getTime();
-    if (dateDiff === 0) {
-      return b.term - a.term; // If dates are the same, the higher term number is considered more recent
+  // Helper function to get the payment method of the most recent payment
+  const getMostRecentPaymentMethod = (record) => {
+    const payments = [];
+    if (record.term1PaymentDate && record.term1PaymentMethod && record.term1Status === 'Paid') {
+      payments.push({ date: new Date(record.term1PaymentDate), method: record.term1PaymentMethod, term: 1 });
     }
-    return dateDiff;
-  });
+    if (record.term2PaymentDate && record.term2PaymentMethod && record.term2Status === 'Paid') {
+      payments.push({ date: new Date(record.term2PaymentDate), method: record.term2PaymentMethod, term: 2 });
+    }
+    if (record.term3PaymentDate && record.term3PaymentMethod && record.term3Status === 'Paid') {
+      payments.push({ date: new Date(record.term3PaymentDate), method: record.term3PaymentMethod, term: 3 });
+    }
 
-  return payments[0].method;
-};
+    if (payments.length === 0) {
+      return 'N/A';
+    }
+
+    // Sort payments in descending order by date. If dates are equal, sort by term number (descending)
+    payments.sort((a, b) => {
+      const dateDiff = b.date.getTime() - a.date.getTime();
+      if (dateDiff === 0) {
+        return b.term - a.term; // If dates are the same, the higher term number is considered more recent
+      }
+      return dateDiff;
+    });
+
+    return payments[0].method;
+  };
 
   // Use the custom hook for animated stats
   const animatedTotalFees = useCountUp(stats.totalFees, 1500);
@@ -812,18 +813,18 @@ const getMostRecentPaymentMethod = (record) => {
           <IndianRupee className="mr-3 text-indigo-600" size={32} /> Fee Management
         </h1>
         <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-3 w-full sm:w-auto">
-            <button
-                onClick={() => setShowViewPayments(true)}
-                className="bg-purple-700 hover:bg-purple-800 text-white px-6 py-3 rounded-xl flex items-center justify-center shadow-lg transition duration-300 ease-in-out transform hover:scale-105 text-base font-semibold"
-            >
-                <ListChecks size={20} className="mr-2" /> View Payments
-            </button>
-            <button
-                onClick={handleAddClick}
-                className="bg-indigo-700 hover:bg-indigo-800 text-white px-6 py-3 rounded-xl flex items-center justify-center shadow-lg transition duration-300 ease-in-out transform hover:scale-105 text-base font-semibold"
-            >
-                <Plus size={20} className="mr-2" /> Add New Fee
-            </button>
+          <button
+            onClick={() => setShowViewPayments(true)}
+            className="bg-purple-700 hover:bg-purple-800 text-white px-6 py-3 rounded-xl flex items-center justify-center shadow-lg transition duration-300 ease-in-out transform hover:scale-105 text-base font-semibold"
+          >
+            <ListChecks size={20} className="mr-2" /> View Payments
+          </button>
+          <button
+            onClick={handleAddClick}
+            className="bg-indigo-700 hover:bg-indigo-800 text-white px-6 py-3 rounded-xl flex items-center justify-center shadow-lg transition duration-300 ease-in-out transform hover:scale-105 text-base font-semibold"
+          >
+            <Plus size={20} className="mr-2" /> Add New Fee
+          </button>
         </div>
       </div>
 
@@ -1023,7 +1024,7 @@ const getMostRecentPaymentMethod = (record) => {
                         <span className={`px-2 py-0.5 inline-flex text-xs leading-5 font-semibold rounded-full
                           ${record.status === 'Paid' ? 'bg-green-100 text-green-800' :
                             record.status === 'Overdue' ? 'bg-red-100 text-red-800' :
-                            'bg-yellow-100 text-yellow-800'}`}>
+                              'bg-yellow-100 text-yellow-800'}`}>
                           {record.status}
                         </span>
                       </td>

@@ -36,6 +36,7 @@ function MessageModule() {
     activeTab,
     setActiveTab,
     fetchMessages,
+    unreadMessageCount
   } = useMessages();
 
   // Get current user info
@@ -136,7 +137,8 @@ function MessageModule() {
   }, [messages, activeTab, filters, currentUserId]);
 
   // Memoized counts for performance
-  const unreadCount = useMemo(() => messages.filter(m => !m.read && m.status === 'sent' && m.status !== 'trash').length, [messages]);
+  // const unreadCount = useMemo(() => messages.filter(m => !m.read && m.status === 'sent' && m.status !== 'trash').length, [messages]);
+  const unreadCount = useMemo(() => unreadMessageCount, [unreadMessageCount]);
   const draftsCount = useMemo(() => messages.filter(m => m.status === 'draft').length, [messages]);
   const starredCount = useMemo(() => messages.filter(m => m.starred && m.status !== 'trash').length, [messages]);
   const trashCount = useMemo(() => messages.filter(m =>

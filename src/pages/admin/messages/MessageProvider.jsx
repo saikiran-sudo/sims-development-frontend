@@ -53,8 +53,6 @@ export const MessageProvider = ({ children }) => {
       const data = res.data;
       const messageArray = Array.isArray(data) ? data : (data.messages || []);
       
-      console.log('Received messages:', messageArray.length, 'for tab:', tab);
-      console.log('Sample message data:', messageArray[0]);
       
       // Transform the data to match the frontend expectations
       const transformedMessages = messageArray.map(msg => ({
@@ -83,8 +81,7 @@ export const MessageProvider = ({ children }) => {
         attachments: msg.attachments?.map(att => att.name || att.url) || []
       }));
       
-      console.log('Transformed messages:', transformedMessages.length);
-      console.log('Sample transformed message:', transformedMessages[0]);
+      
       setMessages(transformedMessages);
     } catch (err) {
       setError(err.response?.data?.message || err.message);
@@ -102,29 +99,13 @@ export const MessageProvider = ({ children }) => {
   // Calculate unread count for inbox
   const unreadMessageCount = messages.filter(m =>
     !m.read &&
-    m.status === 'sent' &&
-    m.status !== 'trash'
+    m.status === 'sent'
   ).length;
 
   // Send or save message (sent or draft)
   const handleSendMessage = async (messageData) => {
     setLoading(true);
     setError(null);
-    // try {
-    //   // The messageData should already be a FormData object from ComposeMessage
-    //   await axios.post(`${API_BASE_URL}`, messageData, {
-    //     headers: {
-    //       ...getAuthHeaders(),
-    //       'Content-Type': 'multipart/form-data',
-    //     },
-    //   });
-    //   await fetchMessages();
-    // } catch (err) {
-    //   setError(err.response?.data?.message || err.message);
-    //   throw err; // Re-throw so ComposeMessage can handle it
-    // } finally {
-    //   setLoading(false);
-    // }
   };
 
   const handleSaveDraft = async (messageData) => {

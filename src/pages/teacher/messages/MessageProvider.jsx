@@ -16,9 +16,6 @@ const headers = token ? { Authorization: `Bearer ${token}` } : {};
 const getAuthHeaders = () => {
   try {
     const token = JSON.parse(localStorage.getItem('authToken'));
-    console.log('Raw token from localStorage:', token);
-
-    console.log('Parsed token:', token);
     return token ? { Authorization: `Bearer ${token}` } : {};
   } catch (error) {
     console.error('Error parsing token:', error);
@@ -75,13 +72,11 @@ export const MessageProvider = ({ children }) => {
         if (v) params.set(k, v);
       });
 
-      console.log('Fetching messages for tab:', tab, 'with params:', params.toString());
 
       const res = await axios.get(`${API_BASE_URL}/msg-under-my-admin?${params.toString()}`, {
         headers: getAuthHeaders(),
       });
 
-      console.log('API Response:', res.data);
 
       // Handle the response data
       const data = res.data;
@@ -89,7 +84,7 @@ export const MessageProvider = ({ children }) => {
 
       // Transform the data to match the frontend expectations
       const transformedMessages = messageArray.map(msg => {
-        console.log('Raw message from API:', msg);
+        
         return {
           id: msg._id,
           sender: (() => {
@@ -117,7 +112,7 @@ export const MessageProvider = ({ children }) => {
         };
       });
 
-      console.log('Transformed messages:', transformedMessages);
+    
       setMessages(transformedMessages);
     } catch (err) {
       setError(err.response?.data?.message || err.message);
@@ -284,12 +279,6 @@ export const MessageProvider = ({ children }) => {
     setError(null);
     try {
       const headers = getAuthHeaders();
-      console.log('Sending request to mark as read:', id);
-      console.log('Headers:', headers);
-      console.log('Token from localStorage:', localStorage.getItem('authToken'));
-
-      // Try the regular read endpoint first (works for all roles including teachers)
-
       
       await axios.put(`${API_BASE_URL}/${id}/read-under-my-admin`, {}, { headers });
 
